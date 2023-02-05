@@ -56,6 +56,10 @@ def screen_menu():
                 elif exitButton.collidepoint(event.pos):
                     pygame.quit()
                     sys.exit()
+            if event.type == pygame.KEYDOWN:
+                if event.key ==  pygame.K_ESCAPE:
+                    pygame.quit()
+                    sys.exit()
 
         #desenha o botão de iniciar o jogo
         pygame.draw.rect(menu_screen, (0, 0, 0), startButton)
@@ -176,6 +180,11 @@ def screen_SelectMusic():
                     click_sound.play()
                     pygame.quit()
                     sys.exit()
+            if event.type == pygame.KEYDOWN:
+                if event.key ==  pygame.K_ESCAPE:
+                    click_sound.play()
+                    screen_menu()
+                    break
 
         #desenha o botão de selecionar a musica 1
         pygame.draw.rect(select_music_screen, (0, 0, 0), music1Button)
@@ -397,6 +406,10 @@ def screen_inGame(music):
                 exit()
             if event.type == pygame.USEREVENT:
                 time -= 1
+            if event.type == pygame.KEYDOWN:
+                if event.key ==  pygame.K_ESCAPE:
+                    screen_menu()
+                    break
 
         # configurações de movimento e controle de colisão
         pressed_key = pygame.key.get_pressed()
@@ -597,6 +610,11 @@ def screenGameOver(score, record):
                 if exitButton.collidepoint(event.pos):
                     pygame.quit()
                     sys.exit()
+            if event.type == pygame.KEYDOWN:
+                click_sound.play()
+                if event.key ==  pygame.K_ESCAPE:
+                    pygame.mixer.music.stop()
+                    screen_menu()
 
         pygame.draw.rect(gameOver_screen, 'Gold', restart, 5)
         pygame.draw.rect(gameOver_screen, 'Red', backButton, 5)
