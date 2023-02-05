@@ -39,7 +39,7 @@ def screen_menu():
 
     #configurando a musica de fundo
     pygame.mixer.music.load('./music/86.mp3')
-    pygame.mixer.music.set_volume(0.5)
+    pygame.mixer.music.set_volume(0.2)
     pygame.mixer.music.play(-1)
 
     #configurando os eventos do menu
@@ -128,7 +128,7 @@ def screen_SelectMusic():
 
     #configurando barulho de clique
     click_sound = pygame.mixer.Sound('./music/transicao.wav')
-    click_sound.set_volume(0.5)
+    click_sound.set_volume(0.2)
     click_sound2 = pygame.mixer.Sound('./music/letsFight.wav')
     click_sound2.set_volume(1)
     
@@ -207,7 +207,6 @@ def screen_SelectMusic():
 # função que representa o jogo rodando
 def screen_inGame(music):
 
-
     # configurações do jogo
     FPS = 60 # velocidade do jogo
     pygame.init() # inicializa o pygame
@@ -278,7 +277,15 @@ def screen_inGame(music):
     elif music == 4:
         time = 180
     score = 0
+    baseadaoScore = 0
+    watchScore = 0
+    gasolinaScore = 0
     record = get_record()
+
+    # Limite da mochila (baseadões, relógios e gasolina) --> depois será implementado com knapsack
+    limiteBaseadao = 3
+    limiteWatch = 3
+    limiteGasolina = 3 
 
     # fontes de texto
     font = pygame.font.SysFont('Impact', 150)
@@ -300,15 +307,27 @@ def screen_inGame(music):
     text_rect3 = text3.get_rect()
     text_rect3.center = exitButton.center
 
+    #configurando barulho da gasolina
+    click_soundGasolina = pygame.mixer.Sound('./music/ReadyGoEffect.wav')
+    click_soundGasolina.set_volume(1)
+
+    #configurando barulho do baseadão
+    click_soundBaseado = pygame.mixer.Sound('./music/RdrigoFaroCavalo.wav')
+    click_soundBaseado.set_volume(1)
+
+    #configurando barulho do relógio
+    click_soundRelgio = pygame.mixer.Sound('./music/SamsungEstourado.wav')
+    click_soundRelgio.set_volume(1)
+
+    #configurando barulho de derrota
+    click_soundDerrota = pygame.mixer.Sound('./music/OhShit.wav')
+    click_soundDerrota.set_volume(1)
+
     # começa o jogo (loop principal - O labirinto é gerado aleatoriamente pelo maze_generator.py)
     while True:
         surface.blit(bgPainel, (WIDTH, 0))
         surface.blit(game_surface, (0, 0))
         game_surface.blit(bg_game, (0, 0))
-
-        if time == 0:
-            screen_loss()
-            return
 
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
@@ -343,163 +362,187 @@ def screen_inGame(music):
 
         # verifica se comeu um baseadão (deixa um pouco mais lento mais ganha tempo)
         if take_baseadao(baseadao_list, player_rect):
+            # som de baseadão
+            click_soundBaseado.play()
             FPS -= 5
             score += 0
             time -= 10
+            baseadaoScore += 1
 
         # verifica se comeu um relógio (apenas da mais tempo)
         if take_watch(watches_list, player_rect):
+            # som de relógio
+            click_soundRelgio.play()
             FPS += 0
             score += 0
             time += 50
+            watchScore += 1
 
         # verifica se comeu gasolina
         if take_gasolina(gas_list, player_rect):
-            FPS += 50
+            # som de gasolina
+            click_soundGasolina.play()
+            FPS += 20
             score += 0
             time -= 20
+            gasolinaScore += 1
 
 
         # reinicia o jogo quando o player perde (tempo esgotado) - 
         if time < 0:
-            player_rect.center = TILE // 2, TILE // 2
-            [food.set_pos() for food in selkers_list]
-            set_record(record, score)
-            record = get_record()
-            time, score, FPS = 60, 0, 60
+            #player_rect.center = TILE // 2, TILE // 2
+            #[food.set_pos() for food in selkers_list]
+            #set_record(record, score)
+            #record = get_record()
+            #time, score, FPS = 60, 0, 60
+
+            # som de derrota
+            click_soundDerrota.play()
+            pygame.time.delay(2500)
+            screenGameOver(score, record)
 
         # draw player
         game_surface.blit(player_img, player_rect)
 
-        # draw food
+        # draw selkers
         [food.draw() for food in selkers_list]
 
-        # draw enemy
+        # draw blackSelkers
         [enemy.draw() for enemy in blackSelkers_list]
 
         # draw baseadao
-        [baseadao.draw() for baseadao in baseadao_list]
+        if baseadaoScore < limiteBaseadao:
+            [baseadao.draw() for baseadao in baseadao_list]
 
         # draw watch
-        [watch.draw() for watch in watches_list]
+        if watchScore < limiteWatch:
+            [watch.draw() for watch in watches_list]
 
         # draw gasolina
-        [gas.draw() for gas in gas_list]
+        if gasolinaScore < limiteGasolina:
+            [gas.draw() for gas in gas_list]
 
         # desenha no painel a label e o valor do tempo 
         txt1 = text_font.render('TIME', True, pygame.Color('cyan'), True)
-        txt1 = pygame.transform.scale(txt1, (int(txt1.get_width() * 0.5), int(txt1.get_height() * 0.5)))
-        surface.blit(txt1, (WIDTH + 70, 30))
+        txt1 = pygame.transform.scale(txt1, (int(txt1.get_width() * 0.2), int(txt1.get_height() * 0.2)))
+        surface.blit(txt1, (WIDTH + 70, 15))
         txtTime = font.render(f'{time}', True, pygame.Color('cyan'))
-        txtTime = pygame.transform.scale(txtTime, (int(txtTime.get_width() * 0.5), int(txtTime.get_height() * 0.5)))
-        surface.blit(txtTime, (WIDTH + 70, 100))
+        txtTime = pygame.transform.scale(txtTime, (int(txtTime.get_width() * 0.2), int(txtTime.get_height() * 0.2)))
+        surface.blit(txtTime, (WIDTH + 70, 30))
 
         # desenha no painel a label e o valor do score
         txt2 = text_font.render('SCORE', True, pygame.Color('cyan'), True)
-        txt2 = pygame.transform.scale(txt2, (int(txt2.get_width() * 0.5), int(txt2.get_height() * 0.5)))
-        surface.blit(txt2, (WIDTH + 70, 200))
+        txt2 = pygame.transform.scale(txt2, (int(txt2.get_width() * 0.2), int(txt2.get_height() * 0.2)))
+        surface.blit(txt2, (WIDTH + 70, 70))
         txtScore = font.render(f'{score}', True, pygame.Color('cyan'))
-        txtScore = pygame.transform.scale(txtScore, (int(txtScore.get_width() * 0.5), int(txtScore.get_height() * 0.5)))
-        surface.blit(txtScore, (WIDTH + 70, 270))
+        txtScore = pygame.transform.scale(txtScore, (int(txtScore.get_width() * 0.2), int(txtScore.get_height() * 0.2)))
+        surface.blit(txtScore, (WIDTH + 70, 85))
 
         # desenha no painel a label e o valor do record
         txt3 = text_font.render('RECORD', True, pygame.Color('cyan'), True)
-        txt3 = pygame.transform.scale(txt3, (int(txt3.get_width() * 0.5), int(txt3.get_height() * 0.5)))
-        surface.blit(txt3, (WIDTH + 70, 370))
+        txt3 = pygame.transform.scale(txt3, (int(txt3.get_width() * 0.2), int(txt3.get_height() * 0.2)))
+        surface.blit(txt3, (WIDTH + 70, 125))
         txtRecord = font.render(f'{record}', True, pygame.Color('cyan'))
-        txtRecord = pygame.transform.scale(txtRecord, (int(txtRecord.get_width() * 0.5), int(txtRecord.get_height() * 0.5)))
-        surface.blit(txtRecord, (WIDTH + 70, 440))        
+        txtRecord = pygame.transform.scale(txtRecord, (int(txtRecord.get_width() * 0.2), int(txtRecord.get_height() * 0.2)))
+        surface.blit(txtRecord, (WIDTH + 70, 140))        
 
         # desenha no painel a label e o valor do baseadão
-        txt4 = text_font.render('BASEADO', True, pygame.Color('cyan'), True)
-        txt4 = pygame.transform.scale(txt4, (int(txt4.get_width() * 0.5), int(txt4.get_height() * 0.5)))
-        surface.blit(txt4, (WIDTH + 70, 540))
-        txtBaseadao = font.render(f'{baseadao}', True, pygame.Color('cyan'))
-        txtBaseadao = pygame.transform.scale(txtBaseadao, (int(txtBaseadao.get_width() * 0.5), int(txtBaseadao.get_height() * 0.5)))
-        surface.blit(txtBaseadao, (WIDTH + 70, 610))
+        txt4 = text_font.render('BASEADÕES (Max 3)', True, pygame.Color('cyan'), True)
+        txt4 = pygame.transform.scale(txt4, (int(txt4.get_width() * 0.2), int(txt4.get_height() * 0.2)))
+        surface.blit(txt4, (WIDTH + 70, 180))
+        txtBaseadao = font.render(f'{baseadaoScore}', True, pygame.Color('cyan'))
+        txtBaseadao = pygame.transform.scale(txtBaseadao, (int(txtBaseadao.get_width() * 0.2), int(txtBaseadao.get_height() * 0.2)))
+        surface.blit(txtBaseadao, (WIDTH + 70, 195))
 
         # desenha no painel a label e o valor do relógio
-        txt5 = text_font.render('RELOGIO', True, pygame.Color('cyan'), True)
-        txt5 = pygame.transform.scale(txt5, (int(txt5.get_width() * 0.5), int(txt5.get_height() * 0.5)))
-        surface.blit(txt5, (WIDTH + 70, 710))
-        txtWatch = font.render(f'{watch}', True, pygame.Color('cyan'))
-        txtWatch = pygame.transform.scale(txtWatch, (int(txtWatch.get_width() * 0.5), int(txtWatch.get_height() * 0.5)))
-        surface.blit(txtWatch, (WIDTH + 70, 780))
+        txt5 = text_font.render('RELOGIOS (Max 3)', True, pygame.Color('cyan'), True)
+        txt5 = pygame.transform.scale(txt5, (int(txt5.get_width() * 0.2), int(txt5.get_height() * 0.2)))
+        surface.blit(txt5, (WIDTH + 70, 235))
+        txtWatch = font.render(f'{watchScore}', True, pygame.Color('cyan'))
+        txtWatch = pygame.transform.scale(txtWatch, (int(txtWatch.get_width() * 0.2), int(txtWatch.get_height() * 0.2)))
+        surface.blit(txtWatch, (WIDTH + 70, 250))
 
         # desenha no painel a label e o valor do gasolina
-        txt6 = text_font.render('GASOLINA', True, pygame.Color('cyan'), True)
-        txt6 = pygame.transform.scale(txt6, (int(txt6.get_width() * 0.5), int(txt6.get_height() * 0.5)))
-        surface.blit(txt6, (WIDTH + 70, 880))
-        txtGas = font.render(f'{gasolina}', True, pygame.Color('cyan'))
-        txtGas = pygame.transform.scale(txtGas, (int(txtGas.get_width() * 0.5), int(txtGas.get_height() * 0.5)))
-        surface.blit(txtGas, (WIDTH + 70, 950))
+        txt6 = text_font.render('GASOLINAS (Max 3)', True, pygame.Color('cyan'), True)
+        txt6 = pygame.transform.scale(txt6, (int(txt6.get_width() * 0.2), int(txt6.get_height() * 0.2)))
+        surface.blit(txt6, (WIDTH + 70, 290))
+        txtGas = font.render(f'{gasolinaScore}', True, pygame.Color('cyan'))
+        txtGas = pygame.transform.scale(txtGas, (int(txtGas.get_width() * 0.2), int(txtGas.get_height() * 0.2)))
+        surface.blit(txtGas, (WIDTH + 70, 305))
 
-        # desenha no painel a label e o valor do relógio 
-        # print(clock.get_fps())
         pygame.display.flip()
         clock.tick(FPS)
 
 # função que representa a tela de derrota
-def screen_loss():
-   
-    #cria a tela do menu de derrota
-    menu_screen = pygame.display.set_mode((WIDTH, HEIGHT))
+def screenGameOver(score, record):
 
-    #configura a imagem de fundo do menu
-    menu_background = pygame.image.load('./img/lose.png')
-    menu_background = pygame.transform.scale(menu_background, (WIDTH, HEIGHT))
-    menu_screen.blit(menu_background, (0, 0))
+    # para a música de fundo
+    pygame.mixer.music.stop()
 
-    #cria e configura botão para reiniciar o jogo (voltar ao menu)
-    startButton = pygame.Rect(0, 0, 200, 50)
-    startButton.center = WIDTH // 2, HEIGHT // 2
+    # adiciona a musica de derrota
+    pygame.mixer.music.load('./music/Lose.mp3')
+    pygame.mixer.music.set_volume(1)
+    pygame.mixer.music.play(-1)
+
+    # cria a tela de derrota
+    gameOver_screen = pygame.display.set_mode((WIDTH, HEIGHT))
+
+    # carrega a imagem de fundo
+    background = pygame.image.load('./img/lose.png')
+    background = pygame.transform.scale(background, (WIDTH, HEIGHT))
+
+    #cria e configura botão para nova tentativa
+    restart = pygame.Rect(0, 0, 200, 50) 
+    restart.center = WIDTH // 2, HEIGHT // 2.5
     font = pygame.font.SysFont('./font/Monoton-Regular.ttf', 30)
-    text = font.render('Try Again', True, ('Gold'))
+    text = font.render('Tentar Novamente', True, ('Green'))
     text_rect = text.get_rect()
-    text_rect.center = startButton.center
+    text_rect.center = restart.center
+
+    #cria e configura botão para voltar ao menu
+    backButton = pygame.Rect(0, 0, 200, 50)
+    backButton.center = WIDTH // 6, HEIGHT // 2.5 + 350
+    font5 = pygame.font.SysFont('./font/Monoton-Regular.ttf', 30)
+    text5 = font5.render('Menu Principal', True, ('Red'))
+    text_rect5 = text5.get_rect()
+    text_rect5.center = backButton.center
 
     #cria e configura botão para sair do jogo
     exitButton = pygame.Rect(0, 0, 200, 50)
-    exitButton.center = WIDTH // 2, HEIGHT // 2 + 200
-    font3 = pygame.font.SysFont('./font/Monoton-Regular.ttf', 30)
-    text3 = font3.render('Exit', True, ('Gold'))
-    text_rect3 = text3.get_rect()
-    text_rect3.center = exitButton.center
+    exitButton.center = WIDTH // 1.2, HEIGHT // 2.5 + 350
+    font6 = pygame.font.SysFont('./font/Monoton-Regular.ttf', 30)
+    text6 = font6.render('Sair', True, ('Red'))
+    text_rect6 = text6.get_rect()
+    text_rect6.center = exitButton.center
 
     #configurando barulho de clique
     click_sound = pygame.mixer.Sound('./music/transicao.wav')
     click_sound.set_volume(1)
 
-    #configurando a musica de fundo
-    pygame.mixer.music.load('./music/SweetChild.mp3')
-    pygame.mixer.music.set_volume(0.5)
-    pygame.mixer.music.play(-1)
-
-    #configurando os eventos do menu
     while True:
-
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 pygame.quit()
                 sys.exit()
             if event.type == pygame.MOUSEBUTTONDOWN:
-                if startButton.collidepoint(event.pos):
-                    # adicionando o som de clique
-                    click_sound.play()
+                click_sound.play()
+                if restart.collidepoint(event.pos):
                     screen_SelectMusic()
-                elif exitButton.collidepoint(event.pos):
+                if backButton.collidepoint(event.pos):
+                    pygame.mixer.music.stop()
+                    screen_menu()
+                if exitButton.collidepoint(event.pos):
                     pygame.quit()
                     sys.exit()
 
-        #desenha o botão de iniciar o jogo
-        pygame.draw.rect(menu_screen, (0, 0, 0), startButton)
-        menu_screen.blit(text, text_rect)
-
-        #desenha o botão de sair do jogo
-        pygame.draw.rect(menu_screen, (0, 0, 0), exitButton)
-        menu_screen.blit(text3, text_rect3)
-
-        pygame.display.update() # atualiza a tela
+        pygame.draw.rect(gameOver_screen, 'Gold', restart, 5)
+        pygame.draw.rect(gameOver_screen, 'Red', backButton, 5)
+        pygame.draw.rect(gameOver_screen, 'Red', exitButton, 5)
+        gameOver_screen.blit(background, (0, 0))
+        gameOver_screen.blit(text, text_rect)
+        gameOver_screen.blit(text5, text_rect5)
+        gameOver_screen.blit(text6, text_rect6)
+        pygame.display.flip()
         
 # inicia o jogo
 pygame.init()
