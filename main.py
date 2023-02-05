@@ -1,6 +1,5 @@
 from controller import *
 
-
 # Tela do menu principal
 def screen_menu():
 
@@ -13,9 +12,9 @@ def screen_menu():
     menu_screen.blit(menu_background, (0, 0))
 
     # cria os textos do menu com a fonte neon na pasta font
-    txt1 = pygame.font.Font('./font/Monoton-Regular.ttf', 100).render('Neon Maze 2', True, ('Blue')).get_rect(center=(WIDTH // 2, HEIGHT // 2 - 200))
+    txt1 = pygame.font.Font('./font/Monoton-Regular.ttf', 100).render('Reggae Maze', True, ('Blue')).get_rect(center=(WIDTH // 2, HEIGHT // 2 - 200))
     # coloca o texto na tela
-    menu_screen.blit(pygame.font.Font('./font/Monoton-Regular.ttf',100).render('Neon Maze 2', True, ('Gold')), txt1)
+    menu_screen.blit(pygame.font.Font('./font/Monoton-Regular.ttf',100).render('Reggae Maze', True, ('Gold')), txt1)
 
     #cria e configura botão para iniciar o jogo (usando a imagem "play.png")
     startButton = pygame.Rect(0, 0, 200, 50)
@@ -204,6 +203,60 @@ def screen_SelectMusic():
 
         pygame.display.update() # atualiza a tela
 
+
+# knapsack para saber qual a melhor forma de escolher os itens para colocar na mochila baseado no peso e no valor de cada item e no peso maximo que a mochila suporta
+# Relógio - peso = 10
+# Baseado - peso = 5
+# Gasolina - peso = 20
+# a função deve retornar o limite de baseado, o limite de gasolina e o limite de relógio
+def knapsack(music):
+    # variaveis para armazenar o peso e o valor de cada item
+    pesoBaseadao = 5
+    pesoWatch = 10
+    pesoGasolina = 20
+    valorBaseadao = 0
+    valorWatch = 0
+    valorGasolina = 0
+    # variaveis para armazenar o peso maximo que a mochila suporta
+    pesoMaximo = 0
+    # variaveis para armazenar o limite de cada item que a mochila suporta
+    limiteBaseadao = 0
+    limiteWatch = 0
+    limiteGasolina = 0
+
+    # se a musica for a 1
+    if music == 1:
+        valorBaseadao = 10
+        valorWatch = 20
+        valorGasolina = 30
+        pesoMaximo = 50
+    # se a musica for a 2
+    elif music == 2:
+        valorBaseadao = 20
+        valorWatch = 30
+        valorGasolina = 40
+        pesoMaximo = 60
+    # se a musica for a 3
+    elif music == 3:
+        valorBaseadao = 30
+        valorWatch = 40
+        valorGasolina = 50
+        pesoMaximo = 70
+    # se a musica for a 4
+    elif music == 4:
+        valorBaseadao = 40
+        valorWatch = 50
+        valorGasolina = 60
+        pesoMaximo = 80
+
+    # calculando o limite de cada item
+    limiteBaseadao = pesoMaximo // pesoBaseadao
+    limiteWatch = pesoMaximo // pesoWatch
+    limiteGasolina = pesoMaximo // pesoGasolina
+
+    # retornando o limite de cada item
+    return limiteBaseadao, limiteWatch, limiteGasolina
+
 # função que representa o jogo rodando
 def screen_inGame(music):
 
@@ -216,24 +269,37 @@ def screen_inGame(music):
 
     # imagens do jogo
     personIMG = ''
+    # Limite da mochila (baseadões, relógios e gasolina) --> depois será implementado com knapsack
+    limiteBaseadao = 3
+    limiteWatch = 3
+    limiteGasolina = 3 
+
+    
+    # a musica 1 é "hardcore", logo, o peso máximo da mochila é 10
     if music == 1:
         bg_game = pygame.image.load('img/bgCastelvania.png').convert() # carrega a imagem de fundo do jogo
         bg_game = pygame.transform.scale(bg_game, (WIDTH, HEIGHT)) # redimensiona a imagem de fundo do jogo
         bgPainel = pygame.image.load('img/bg_main.jpg').convert() # carrega a imagem de fundo do painel
         bgPainel = pygame.transform.scale(bgPainel, (300, HEIGHT)) # redimensiona a imagem de fundo do painel
         personIMG = 'img/CastelvaniaPerson.png'
+
+    # a musica 2 é "hardcore", logo, o peso máximo da mochila é 10 também
     if music == 2:
         bg_game = pygame.image.load('img/bgDonkeyKong.jpg').convert() # carrega a imagem de fundo do jogo
         bg_game = pygame.transform.scale(bg_game, (WIDTH, HEIGHT)) # redimensiona a imagem de fundo do jogo
         bgPainel = pygame.image.load('img/bg_main.jpg').convert() # carrega a imagem de fundo do painel
         bgPainel = pygame.transform.scale(bgPainel, (300, HEIGHT)) # redimensiona a imagem de fundo do painel
         personIMG = 'img/DonkeyKongPerson.png'
+    
+    # a musica 3 é "normal", logo, o peso máximo da mochila é 100
     if music == 3:
         bg_game = pygame.image.load('img/bgTokioDrift.jpg').convert() # carrega a imagem de fundo do jogo
         bg_game = pygame.transform.scale(bg_game, (WIDTH, HEIGHT)) # redimensiona a imagem de fundo do jogo
         bgPainel = pygame.image.load('img/bg_main.jpg').convert() # carrega a imagem de fundo do painel
         bgPainel = pygame.transform.scale(bgPainel, (300, HEIGHT)) # redimensiona a imagem de fundo do painel
         personIMG = 'img/TokioDriftPerson.png'
+    
+    # a musica 4 é "easy", logo, o peso máximo da mochila é 200
     if music == 4:
         bg_game = pygame.image.load('img/bgTopGear.jpg').convert() # carrega a imagem de fundo do jogo
         bg_game = pygame.transform.scale(bg_game, (WIDTH, HEIGHT)) # redimensiona a imagem de fundo do jogo
@@ -243,6 +309,9 @@ def screen_inGame(music):
 
     # gera o labirinto
     maze = generate_maze()
+
+    # usando o knapsack para definir as variaveis limiteBaseadao, limiteWatch e limiteGasolina
+    limiteBaseadao, limiteWatch, limiteGasolina = knapsack(music)
 
     # cria o jogador
     player_img = pygame.image.load(personIMG).convert_alpha()
@@ -281,11 +350,6 @@ def screen_inGame(music):
     watchScore = 0
     gasolinaScore = 0
     record = get_record()
-
-    # Limite da mochila (baseadões, relógios e gasolina) --> depois será implementado com knapsack
-    limiteBaseadao = 3
-    limiteWatch = 3
-    limiteGasolina = 3 
 
     # fontes de texto
     font = pygame.font.SysFont('Impact', 150)
@@ -447,7 +511,7 @@ def screen_inGame(music):
         surface.blit(txtRecord, (WIDTH + 70, 140))        
 
         # desenha no painel a label e o valor do baseadão
-        txt4 = text_font.render('BASEADÕES (Max 3)', True, pygame.Color('cyan'), True)
+        txt4 = text_font.render('BASEADÕES (Max '+str(limiteBaseadao)+')', True, pygame.Color('cyan'), True)
         txt4 = pygame.transform.scale(txt4, (int(txt4.get_width() * 0.2), int(txt4.get_height() * 0.2)))
         surface.blit(txt4, (WIDTH + 70, 180))
         txtBaseadao = font.render(f'{baseadaoScore}', True, pygame.Color('cyan'))
@@ -455,7 +519,7 @@ def screen_inGame(music):
         surface.blit(txtBaseadao, (WIDTH + 70, 195))
 
         # desenha no painel a label e o valor do relógio
-        txt5 = text_font.render('RELOGIOS (Max 3)', True, pygame.Color('cyan'), True)
+        txt5 = text_font.render('RELOGIOS (Max '+str(limiteWatch)+')', True, pygame.Color('cyan'), True)
         txt5 = pygame.transform.scale(txt5, (int(txt5.get_width() * 0.2), int(txt5.get_height() * 0.2)))
         surface.blit(txt5, (WIDTH + 70, 235))
         txtWatch = font.render(f'{watchScore}', True, pygame.Color('cyan'))
@@ -463,7 +527,7 @@ def screen_inGame(music):
         surface.blit(txtWatch, (WIDTH + 70, 250))
 
         # desenha no painel a label e o valor do gasolina
-        txt6 = text_font.render('GASOLINAS (Max 3)', True, pygame.Color('cyan'), True)
+        txt6 = text_font.render('GASOLINAS (Max ' + str(limiteGasolina)+')', True, pygame.Color('cyan'), True)
         txt6 = pygame.transform.scale(txt6, (int(txt6.get_width() * 0.2), int(txt6.get_height() * 0.2)))
         surface.blit(txt6, (WIDTH + 70, 290))
         txtGas = font.render(f'{gasolinaScore}', True, pygame.Color('cyan'))
