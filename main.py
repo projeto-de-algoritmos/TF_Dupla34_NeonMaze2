@@ -203,7 +203,6 @@ def screen_SelectMusic():
 
         pygame.display.update() # atualiza a tela
 
-
 # knapsack para saber qual a melhor forma de escolher os itens para colocar na mochila baseado no peso e no valor de cada item e no peso maximo que a mochila suporta
 # Relógio - peso = 10
 # Baseado - peso = 5
