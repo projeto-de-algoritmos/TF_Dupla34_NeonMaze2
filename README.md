@@ -1,4 +1,4 @@
-# Neon Maze 2
+# Reggae Maze
 **Número da Lista**: 34<br>
 **Conteúdo da Disciplina**: Trabalho Final<br>
 
