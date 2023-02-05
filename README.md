@@ -1,6 +1,7 @@
 # Reggae Maze
 **Número da Lista**: 34<br>
 **Conteúdo da Disciplina**: Trabalho Final<br>
+**Algoritmos Utilizados**: DFS com Backtracking (Grafos) + Knapsack adaptada (Programação Dinâmica)
 
 # Alunos
 |Matrícula | Aluno |
