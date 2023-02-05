@@ -14,6 +14,9 @@ Quando criança, Jorginho era um ET muito serelepinho que adorava brincar de esc
 Diante do exposto, a sua missão consiste em auxiliar o Jorge nessa empreitada, levando em consideração diverços utensílhos que você encontrará espalhados pelo mapa.
 Boa sorte nessa empreitada!
 
+# Objetivo
+O seu objetivo consiste em ajudar o Jorge a salvar o maximo de Selkers possível. Cuidado com as armadilhas, pois elas atrapalharão sua missão. Faça uso conciente dos itens, pois quando usados da maneira correta, podem ser grandes aliados nessa aventura!
+
 # Personagens
 Os personagens do jogo baseiam-se no Jorginho, Selkers e Black Selkers.
 
