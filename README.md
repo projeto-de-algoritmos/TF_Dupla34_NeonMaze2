@@ -1,6 +1,7 @@
 # Reggae Maze
 **Número da Lista**: 34<br>
 **Conteúdo da Disciplina**: Trabalho Final<br>
+**Algoritmos Utilizados**: DFS com Backtracking (Grafos) + Knapsack adaptada (Programação Dinâmica)
 
 # Alunos
 |Matrícula | Aluno |
@@ -33,7 +34,7 @@ Os personagens do jogo baseiam-se no Jorginho, Selkers e Black Selkers.
 # Menu de opções
 O menu de opções é composto, basicamente, por duas telas: o menu inicial e o menu de musicas, o qual pode ser acessado ao clicar em "Start" no menu inicial.
 
-![image](https://user-images.githubusercontent.com/72039007/216836338-c40900aa-96cd-4461-98db-64208b3b2386.png)
+![image](https://user-images.githubusercontent.com/72039007/216840391-1c11689a-fa08-4019-8427-13d46505079a.png)
 ### *Imagem 4* - Menu Inicial
 
 ![image](https://user-images.githubusercontent.com/72039007/216836379-bff63d75-dc3a-40a8-87d2-80b67f78cbcd.png)
