@@ -611,8 +611,8 @@ def screenGameOver(score, record):
                     pygame.quit()
                     sys.exit()
             if event.type == pygame.KEYDOWN:
-                click_sound.play()
                 if event.key ==  pygame.K_ESCAPE:
+                    click_sound.play()
                     pygame.mixer.music.stop()
                     screen_menu()
 
