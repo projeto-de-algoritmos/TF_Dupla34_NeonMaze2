@@ -8,7 +8,7 @@
 | 180144979  |  Caetano Santos Lucio |
 | 200019228  |  Gustavo Martins Ribeiro |
 
-# Sobre 
+# Sobre o Jogo
 Quando criança, Jorginho era um ET muito serelepinho que adorava brincar de esconde esconde com seus amiguinhos. Contudo, o tempo passa e um dia a criança cresce, trazendo consigo grandes responsabildiades. É nesse contexto que o jorginho agora é o Jorge, um homem formado defensor de Selkers diante das constantes caçadas comerciais humanas. (Selkers são cachorros extra terrestres cuja carne vale muito nos mercados humanos)
 
 Diante do exposto, a sua missão consiste em auxiliar o Jorge nessa empreitada, levando em consideração diverços utensílhos que você encontrará espalhados pelo mapa.
@@ -99,3 +99,8 @@ dependendo de alguma instalação prévia do Python.
 O jorginho pode ser movimentando usando as teclas W(cima), A(esquerda), S(embaixo) e D(direita). Cuidado com as paredes!
 <br>
 Divirta-se!
+
+## Sobre o autor
+Olá, eu sou o Gustavo Martins Ribeiro, um jovem amante da cultura Reggae com raizes na cultura afro brasileira. Diante disso, é importante ressaltar que a temática escolhida para esse projeto não se refere à apologia às drogas, e sim da apresentação de um jogo com uma temática da cultura Reggae, a qual vem sendo oprimida gradualmente na sociedade atual. Desejo tudo de bom na vida de vocês e um ótimo descaço. Abraço!
+
+![euReggae](https://user-images.githubusercontent.com/72039007/216838141-90b315c3-fcdb-4cb4-ad01-cd24cf96f393.jpg)
