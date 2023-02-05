@@ -9,35 +9,60 @@
 | 200019228  |  Gustavo Martins Ribeiro |
 
 # Sobre 
-Jorginho é um filhote de ET muito serelepinho e está brincando de esconde-esconde com seus amiguinhos. Contudo, a fim de se esconderem de Jorginho, seus amigos se enfiaram em um local de difícil acesso. No entando, o famoso PAC-MAN, um dos maiores personagens da história dos video games resurge das cinzas para abrir caminho para o jorginho, mas nem tudo é de graça: o PAC-MAN tava locão e acabou gerando um labirinto neon psicodélico. Sua missão é guiar o Jorginho até seus amigos para que ele possa vencer a brincadeira e jogar na cara dos seus amigos que ele é o rei do pique-esconde! 
+Quando criança, Jorginho era um ET muito serelepinho que adorava brincar de esconde esconde com seus amiguinhos. Contudo, o tempo passa e um dia a criança cresce, trazendo consigo grandes responsabildiades. É nesse contexto que o jorginho agora é o Jorge, um homem formado defensor de Selkers diante das constantes caçadas comerciais humanas. (Selkers são cachorros extra terrestres cuja carne vale muito nos mercados humanos)
 
+Diante do exposto, a sua missão consiste em auxiliar o Jorge nessa empreitada, levando em consideração diverços utensílhos que você encontrará espalhados pelo mapa.
 Boa sorte nessa empreitada!
 
-![image](https://user-images.githubusercontent.com/72039007/216782663-d84756be-a5e3-4667-a277-7fa73dc6dcee.png)
-### *Imagem 1* - Jorginho, o filhote de ET
-![image](https://user-images.githubusercontent.com/72039007/216782681-a5fe391a-d38f-43c1-a5c6-44f7c966a982.png)
-### *Imagem 2* - Amiguinhos do Jorginho
-![image](https://user-images.githubusercontent.com/72039007/216782688-7cf03a51-1dfc-41d9-8615-a07ba7bf6043.png)
-### *Imagem 3* - PAC-MAN locão
+# Personagens
+Os personagens do jogo baseiam-se no Jorginho, Selkers e Black Selkers.
 
-# Imagens do jogo
 
-## 1) Menu inicial
-a definir
-### *Imagem 4* - Menu inicial do Neon Game
+![1](https://user-images.githubusercontent.com/72039007/216835973-ab57775c-678d-4ec4-8208-06fc9671e36c.png)
+### *Imagem 1* - Jorginho, o ET vida loka defensor de Selkers
 
-## 2) Labirinto (Aleatório)
-a definir
-### *Imagem 5* - Labirinto aleatório gerado por DFS & Backtraking
+![2](https://user-images.githubusercontent.com/72039007/216835976-95e0f742-f901-4162-82c2-785a21abe933.png)
+### *Imagem 2* - Selkers: animalzinhos indefesos (são como os cachorros para os ETs)
 
-## 3) Tela de Vitória
-a definir
-### *Imagem 6* - Reconhecimento dos amiguinhos quando o jorginho vence
-# Instalação 
+![selkerNegro](https://user-images.githubusercontent.com/72039007/216835984-9552455e-b74d-48d0-85bb-976acd0df345.png)
+### *Imagem 3* - Black Selkers: armadilhas, baseadas nos Selkers, criadas pelos humanos para caçar ETs
+
+# Menu de opções
+O menu de opções é composto, basicamente, por duas telas: o menu inicial e o menu de musicas, o qual pode ser acessado ao clicar em "Start" no menu inicial.
+
+![image](https://user-images.githubusercontent.com/72039007/216836338-c40900aa-96cd-4461-98db-64208b3b2386.png)
+### *Imagem 4* - Menu Inicial
+
+![image](https://user-images.githubusercontent.com/72039007/216836379-bff63d75-dc3a-40a8-87d2-80b67f78cbcd.png)
+### *Imagem 5* - Menu de Músicas
+
+# Itens
+
+![baseadao](https://user-images.githubusercontent.com/72039007/216836913-881363a6-f232-4e82-85d9-b9870bd7f7ba.png)
+### *Imagem 6* - Baseadonys: o baseadones ajuda e atrapalha, use-o com moderação (fornece perda de velocidade, mas ganha um pouco de tempo)
+
+![gasolina](https://user-images.githubusercontent.com/72039007/216836965-037309a8-ae77-41af-8705-a1fa751f124f.png)
+### *Imagem 7* - Gasolina Fast Furious: fornece um grande aumento de velocidade para o Jorginho
+
+![watch](https://user-images.githubusercontent.com/72039007/216836923-1d6b7565-953a-4615-ad00-70a31b3c9a32.png)
+### *Imagem 8* - Relógio Mary Jane: hoje é seu dia de sorte! O Relógio Mary Jane fornece um grande aumento de tempo.
+
+# Tela de derrota
+
+![image](https://user-images.githubusercontent.com/72039007/216836703-723ed2d5-eb41-436d-adab-79224595ef02.png)
+### *Imagem 9* - Tela de derrota: uma mensagem motivacional do grandioso Nelson Mandela para acalmar os ânimos. - "No pain, no gain brah !"
+<br>
+
+# Informações do Software
+
 **Linguagem**: Pyhton<br>
 **Bibliotecas**: PyGame<br>
 
+<br>
+
 >A resolução padrão configurada para este projeto é de 1252x652 para melhor visualização do labirinto. Caso a resolução do seu sistema seja menor, sinta-se livre para mudar os parâmetros de ```altura``` e ```largura``` presentes nas primeiras linhas do arquivo ```\main.py```.
+
+<br>
 
 - ### Windows
 Baixe o pacote Python3 do [site official](https://www.python.org/downloads/), e no momento da instação, marque a opção "Add Python to PATH" para no próximo passo instalar as dependências via terminal e rodar o nosso jogo.
@@ -66,5 +91,8 @@ ou
 python3 ./main.py
 ```
 dependendo de alguma instalação prévia do Python.
-# Uso 
-O jorginho pode ser movimentando usando as teclas W(cima), A(esquerda), S(embaixo) e D(direita) e também usando os direcionais do teclado. Divirta-se!
+
+# Jogabilidade
+O jorginho pode ser movimentando usando as teclas W(cima), A(esquerda), S(embaixo) e D(direita). Cuidado com as paredes!
+<br>
+Divirta-se!
