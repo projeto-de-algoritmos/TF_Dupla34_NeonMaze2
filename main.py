@@ -457,7 +457,7 @@ def screen_inGame(music):
 
         # verifica se comeu um selker preto (deixa mais lento e perde tempo e pontos) 
         if take_BlackSelker(blackSelkers_list, player_rect):
-            FPS -= 10
+            FPS += 0
             if score > 0:
                 score -= 1
             time -= 50
