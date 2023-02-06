@@ -37,7 +37,7 @@ O menu de opções é composto, basicamente, por duas telas: o menu inicial e o 
 ![image](https://user-images.githubusercontent.com/72039007/216840391-1c11689a-fa08-4019-8427-13d46505079a.png)
 ### *Imagem 4* - Menu Inicial
 
-![image](https://user-images.githubusercontent.com/72039007/216836379-bff63d75-dc3a-40a8-87d2-80b67f78cbcd.png)
+![image](https://user-images.githubusercontent.com/72039007/217028252-2c3b3e97-08d7-4a7b-b9d6-3c04b470c036.png)
 ### *Imagem 5* - Menu de Músicas
 
 # Itens
