@@ -85,7 +85,7 @@ def screen_SelectMusic():
     music1Button = pygame.Rect(0, 0, 200, 50) 
     music1Button.center = WIDTH // 2, HEIGHT // 2.5
     font = pygame.font.SysFont('./font/Monoton-Regular.ttf', 30)
-    text = font.render('Castelvania 2 (Hard)', True, ('Gold'))
+    text = font.render('Castelvania 2 (!!!IMPOSSIBLE!!!)', True, ('Red'))
     text_rect = text.get_rect()
     text_rect.center = music1Button.center
 
@@ -212,6 +212,7 @@ def screen_SelectMusic():
 
         pygame.display.update() # atualiza a tela
 
+############################################################################################################################################################################################
 # knapsack para saber qual a melhor forma de escolher os itens para colocar na mochila baseado no peso e no valor de cada item e no peso maximo que a mochila suporta
 # Relógio - peso = 10
 # Baseado - peso = 5
@@ -265,6 +266,19 @@ def knapsack(music):
     # retornando o limite de cada item
     return limiteBaseadao, limiteWatch, limiteGasolina
 
+    # chama a função astar para encontrar o caminho
+    path = astar(maze, start, end)
+    # se o caminho não for None
+    if path:
+        # retorna o próximo nó do caminho
+        return path[-2]
+    # se o caminho for None
+    else:
+        # retorna None
+        return None
+
+############################################################################################################################################################################################
+
 # função que representa o jogo rodando
 def screen_inGame(music):
 
@@ -281,23 +295,28 @@ def screen_inGame(music):
     limiteBaseadao = 3
     limiteWatch = 3
     limiteGasolina = 3 
-
+    # velocidade dos selkers negros
+    speed = 0
     
-    # a musica 1 é "hardcore", logo, o peso máximo da mochila é 10
+    # a musica 1 é "impossível", logo, o peso máximo da mochila é 0
     if music == 1:
         bg_game = pygame.image.load('img/bgCastelvania.png').convert() # carrega a imagem de fundo do jogo
         bg_game = pygame.transform.scale(bg_game, (WIDTH, HEIGHT)) # redimensiona a imagem de fundo do jogo
         bgPainel = pygame.image.load('img/bg_main.jpg').convert() # carrega a imagem de fundo do painel
         bgPainel = pygame.transform.scale(bgPainel, (300, HEIGHT)) # redimensiona a imagem de fundo do painel
         personIMG = 'img/CastelvaniaPerson.png'
+        speed = 2
+        player_speed = 5
 
-    # a musica 2 é "hardcore", logo, o peso máximo da mochila é 10 também
+    # a musica 2 é "dificil", logo, o peso máximo da mochila é 10 também
     if music == 2:
         bg_game = pygame.image.load('img/bgDonkeyKong.jpg').convert() # carrega a imagem de fundo do jogo
         bg_game = pygame.transform.scale(bg_game, (WIDTH, HEIGHT)) # redimensiona a imagem de fundo do jogo
         bgPainel = pygame.image.load('img/bg_main.jpg').convert() # carrega a imagem de fundo do painel
         bgPainel = pygame.transform.scale(bgPainel, (300, HEIGHT)) # redimensiona a imagem de fundo do painel
         personIMG = 'img/DonkeyKongPerson.png'
+        speed = 1
+        player_speed = 5
     
     # a musica 3 é "normal", logo, o peso máximo da mochila é 100
     if music == 3:
@@ -306,6 +325,8 @@ def screen_inGame(music):
         bgPainel = pygame.image.load('img/bg_main.jpg').convert() # carrega a imagem de fundo do painel
         bgPainel = pygame.transform.scale(bgPainel, (300, HEIGHT)) # redimensiona a imagem de fundo do painel
         personIMG = 'img/TokioDriftPerson.png'
+        speed = 1
+        player_speed = 5
     
     # a musica 4 é "easy", logo, o peso máximo da mochila é 200
     if music == 4:
@@ -314,6 +335,8 @@ def screen_inGame(music):
         bgPainel = pygame.image.load('img/bg_main.jpg').convert() # carrega a imagem de fundo do painel
         bgPainel = pygame.transform.scale(bgPainel, (300, HEIGHT)) # redimensiona a imagem de fundo do painel
         personIMG = 'img/TopGearPerson.png'
+        speed = 1
+        player_speed = 6
 
     # gera o labirinto
     maze = generate_maze()
@@ -325,11 +348,10 @@ def screen_inGame(music):
     player_img = pygame.image.load(personIMG).convert_alpha()
     player_img = pygame.transform.scale(player_img, (TILE - 2 * maze[0].thickness, TILE - 2 * maze[0].thickness))
     player_rect = player_img.get_rect()
-    player_speed = 5
     player_rect.center = TILE // 2, TILE // 2
     directions = {'a': (-player_speed, 0), 'd': (player_speed, 0), 'w': (0, -player_speed), 's': (0, player_speed),'left': (-player_speed, 0), 'right': (player_speed, 0),'up': (0, -player_speed), 'down': (0, player_speed)}
     keys = {'a': pygame.K_a, 'd': pygame.K_d, 'w': pygame.K_w, 's': pygame.K_s, 'left': pygame.K_LEFT, 'right': pygame.K_RIGHT, 'up': pygame.K_UP, 'down': pygame.K_DOWN}
-    direction = (0, 0)
+    direction = (0, 0) # direção do jogador (x, y) --> (0, 0) = parado
 
     # cria a lista de personagens (selkers e inimigos)
     selkers_list = [normalSelkers(game_surface) for i in range(3)]
@@ -423,6 +445,10 @@ def screen_inGame(music):
         # desenha o labirinto
         [cell.draw(game_surface) for cell in maze]
 
+        # movimenta os selkers negros em direção ao jogador usando o algoritmo A*
+        for blackSelker in blackSelkers_list:
+            blackSelker.move(player_rect, speed)
+            
         # verifica se comeu a comida e atualiza o score, tempo e FPS (velocidade do jogo)
         if take_Selker(selkers_list, player_rect):
             FPS += 0
@@ -436,33 +462,81 @@ def screen_inGame(music):
                 score -= 1
             time -= 50
 
-        # verifica se comeu um baseadão (deixa um pouco mais lento mais ganha tempo)
+        # verifica se comeu um baseadão (deixa um pouco mais lento mais ganha um pouco de tempo)
         if take_baseadao(baseadao_list, player_rect):
             # som de baseadão
             click_soundBaseado.play()
-            FPS -= 5
-            score += 0
-            time -= 10
-            baseadaoScore += 1
+            if music == 4:
+                FPS -= 1
+                score += 0
+                time += 20
+                baseadaoScore += 1
+            elif music == 3:
+                FPS -= 2
+                score += 0
+                time += 15
+                baseadaoScore += 1
+            elif music == 2:
+                FPS -= 3
+                score += 0
+                time += 10
+                baseadaoScore += 1
+            elif music == 1:
+                FPS -= 5
+                score += 0
+                time += 5
+                baseadaoScore += 1
+
 
         # verifica se comeu um relógio (apenas da mais tempo)
         if take_watch(watches_list, player_rect):
             # som de relógio
             click_soundRelgio.play()
-            FPS += 0
-            score += 0
-            time += 50
-            watchScore += 1
+            if music == 4:
+                FPS += 0
+                score += 0
+                time += 50
+                watchScore += 1
+            elif music == 3:
+                FPS += 0
+                score += 0
+                time += 40
+                watchScore += 1
+            elif music == 2:
+                FPS += 0
+                score += 0
+                time += 30
+                watchScore += 1
+            elif music == 1:
+                FPS += 0
+                score += 0
+                time += 20
+                watchScore += 1
 
         # verifica se comeu gasolina
         if take_gasolina(gas_list, player_rect):
             # som de gasolina
             click_soundGasolina.play()
-            FPS += 20
-            score += 0
-            time -= 20
-            gasolinaScore += 1
-
+            if music == 4:
+                FPS += 30
+                score += 0
+                time += 20
+                gasolinaScore += 1
+            elif music == 3:
+                FPS += 25
+                score += 0
+                time += 15
+                gasolinaScore += 1
+            elif music == 2:
+                FPS += 20
+                score += 0
+                time += 10
+                gasolinaScore += 1
+            elif music == 1:
+                FPS += 15
+                score += 0
+                time += 5
+                gasolinaScore += 1
 
         # reinicia o jogo quando o player perde (tempo esgotado) - 
         if time < 0:

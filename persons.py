@@ -1,5 +1,6 @@
 from random import randrange, choice
 from maze_generator import *
+from math import sqrt
 
 # Selker normal 
 class normalSelkers:
@@ -15,7 +16,7 @@ class normalSelkers:
 
     def draw(self):
         self.game_surface.blit(self.img, self.rect)
-    
+
 # Selker inimigo
 class blackSelkers:
     def __init__(self,game_surface):
@@ -30,3 +31,14 @@ class blackSelkers:
 
     def draw(self):
         self.game_surface.blit(self.img, self.rect)
+    
+    # movimentação do selker inimigo (Black Selker)
+    def move(self, player_rect, speed):
+      if self.rect.x < player_rect.x:
+          self.rect.x += speed
+      elif self.rect.x > player_rect.x:
+           self.rect.x -= speed
+      if self.rect.y < player_rect.y:
+           self.rect.y += speed
+      elif self.rect.y > player_rect.y:
+            self.rect.y -= speed
